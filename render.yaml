@@ -4,34 +4,28 @@ services:
     env: docker
     region: oregon
     plan: starter
-    
-    # Docker image settings
+
     docker:
       dockerfile: Dockerfile
-    
-    # Environment variables
+
     envVars:
       - key: SPRING_DATASOURCE_URL
-        # Require SSL when connecting to Supabase. If you hit TLS verification errors during testing,
-        # you can temporarily append: &sslfactory=org.postgresql.ssl.NonValidatingFactory (NOT for production)
         value: jdbc:postgresql://db.ldxukptpjddrtzcvvcpm.supabase.co:5432/postgres?sslmode=require
       - key: SPRING_DATASOURCE_USERNAME
         value: postgres
       - key: SPRING_DATASOURCE_PASSWORD
         sync: false
-        value: BVKM_PMS
       - key: SPRING_JPA_HIBERNATE_DDL_AUTO
         value: update
       - key: SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT
         value: org.hibernate.dialect.PostgreSQLDialect
-      - key: SERVER_PORT
-        value: "8080"
-    
-    # Port configuration
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_EXPIRATION
+        value: "86400000"
+
     port: 8080
-    
-    # Build command
+
     buildCommand: mvn clean package -DskipTests
-    
-    # Health check
+
     healthCheckPath: /actuator/health
