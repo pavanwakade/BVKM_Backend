@@ -63,7 +63,10 @@ docker push YOUR_USERNAME/pms-backend:latest
 ## 5️⃣ Environment Variables for Render
 
 ```
-SPRING_DATASOURCE_URL=jdbc:postgresql://db.ldxukptpjddrtzcvvcpm.supabase.co:5432/postgres
+## Important: Supabase requires TLS and often resolves to an IPv6-only address.
+## Use the TLS parameter in the JDBC URL and prefer deploying to Render (cloud) if your local Docker
+## does not have IPv6 routing.
+SPRING_DATASOURCE_URL=jdbc:postgresql://db.ldxukptpjddrtzcvvcpm.supabase.co:5432/postgres?sslmode=require
 SPRING_DATASOURCE_USERNAME=postgres
 SPRING_DATASOURCE_PASSWORD=BVKM_PMS
 SPRING_JPA_HIBERNATE_DDL_AUTO=update
