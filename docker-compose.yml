@@ -5,9 +5,12 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: bvkm_backend
-    # NOTE: Docker on Windows (WSL2) cannot reach Supabase because it resolves only to IPv6.
-    # The DNS override (8.8.8.8) does NOT help; Windows Docker lacks working IPv6 routes.
-    # SOLUTION: Deploy to Render (cloud) for full IPv6 support. See DEPLOY_TO_RENDER.md
+    dns:
+      - 1.1.1.1  # Cloudflare DNS - better IPv6 support than Google DNS
+      - 8.8.8.8
+    # NOTE: Docker on Windows (WSL2) has limited IPv6 routing to external endpoints.
+    # Using alternative DNS helps with resolution, but IPv6-only endpoints may still be unreachable.
+    # BEST SOLUTION: Deploy to Render (cloud) for full IPv6 support. See DEPLOY_TO_RENDER.md
     environment:
       # Use SSL when connecting to Supabase. If certificate verification causes issues,
       # you can replace sslmode=require with sslmode=require&sslfactory=org.postgresql.ssl.NonValidatingFactory
