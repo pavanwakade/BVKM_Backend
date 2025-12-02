@@ -1,0 +1,3 @@
+com\bvkm\pms\ApiIntegrationTest.class
+com\bvkm\pms\MasterDataIntegrationTest.class
+com\bvkm\pms\DbConnectionTest.class
