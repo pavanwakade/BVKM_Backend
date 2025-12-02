@@ -18,15 +18,15 @@ WORKDIR /app
 # Install curl for health checks
 RUN apk add --no-cache curl
 
-# Copy the JAR from builder stage
-COPY --from=builder /app/target/pms-0.0.1-SNAPSHOT.jar app.jar
+# Copy the JAR from builder stage (match any built jar)
+COPY --from=builder /app/target/*.jar app.jar
 
 # Expose port
 EXPOSE 8080
 
-# Health check
+# Health check (uses PORT env if provided)
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:8080/actuator/health || exit 1
+    CMD sh -c 'curl -f http://localhost:${PORT:-8080}/actuator/health || exit 1'
 
-# Run the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Run the application and bind to the port provided by the platform (e.g. Render sets $PORT)
+ENTRYPOINT ["sh", "-c", "java -jar app.jar --server.port=${PORT:-8080}"]
